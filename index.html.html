@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Borderô by Ernane Cunha v1.0</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-left: 10px;
+      box-sizing: border-box;
+      border-bottom: 3px solid white;
+    }
+
+    main {
+      margin-top: 50px;
+      
+    }
+
+    main p{
+        margin: 6.5px;
+    }
+
+    main  h4 {
+        margin: 6.5px;
+        display: inline-block;
+        border: 2px solid rgb(252, 203, 203);
+        padding: 4px;
+    }
+
+    #horacreditos {
+      margin: 6.5px;
+        display: inline-block;
+        border: 2px solid rgb(33, 223, 8);
+        padding: 4px;
+
+    }
+
+
+    #titulo {
+      text-align: left;
+      color: white;
+      font-weight: 500;
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      width: 90%;
+    }
+
+    #jaba {
+      text-align: right;
+      font-size: small;
+      font-family: Arial, Helvetica, sans-serif;
+      text-shadow: 0.2px 0.2px 0.2px white;
+      top: auto;
+      width: 20%;
+    }
+
+    .divdasatpv {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+
+    }
+
+    .divdasatpv #pdasatpvsemdesconto , #pdasatpvcomdesconto {
+      width: 41.33%;
+    }
+
+    .divdasatpv #numerosdasatpvsemdesconto , #numerosdasatpvcomdesconto {
+      margin: 2px;
+      margin-right: 5px;
+      width: 70px;
+      display: block;
+      text-align: center;
+    }
+    
+    /*.divdasatpv p {
+
+        width: 40%;
+    }*/
+
+    /*.javaatpv {
+        display: inline-block;
+        width: 5.75%;
+        text-align: center;
+        margin-right: 1px;
+        
+        
+    }*/
+
+    .itens {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px dashed white;
+  align-items: center;
+}
+
+    .itens label {
+  
+  width: 40%;
+  
+}
+
+   .itens input {
+  
+    width: 30%;
+    height: 20px;
+}
+
+    .estilolabel {
+      margin: 6.5px;
+    }
+
+    .estiloinput {
+      margin: 5px;
+      max-width: 60px;
+      appearance: textfield;
+      border-bottom: 2px solid white;
+    }
+
+    input[type=number]::-webkit-outer-spin-button,
+    input[type=number]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    #atpvsemdesconto{
+        text-shadow: 0.8px 0.8px 0.8px orange;
+        font-weight: bold
+    }
+
+    #atpvcomdesconto{
+        text-shadow: 0.8px 0.8px 0.8px blue;
+        font-weight: bold
+    }
+
+    .resultadosazuis {
+        text-shadow: 0.8px 0.8px 0.8px blue;
+        font-weight: bold
+    }
+
+    .resultadosverdes {
+        text-shadow: 0.8px 0.8px 0.8px rgb(33, 223, 8);
+        font-weight: bold
+    }
+
+    #divtotal {
+        margin-top: 15px;
+        width: 100%;
+        text-shadow: 0.8px 0.8px 0.8px rgb(8, 216, 223);
+        font-weight: bold;
+        font-size: xx-large;
+        display: flex;
+
+    }
+
+    #divtotal #labeltotal {
+
+      width: 47%;
+      justify-items: right;
+      text-align: right;
+    }
+
+    #divtotal #blanktotal {
+
+    width: 5.75%;
+    justify-items: right;
+    text-align: right;
+}
+
+
+    #divtotal #totaltotal {
+
+    width: 20%;
+    justify-items: left;
+    text-align: left;
+}
+
+    #totalatpvsemdesconto{
+        text-shadow: 0.8px 0.8px 0.8px orange;
+        font-weight: bold
+    }
+
+    #totalatpvcomdesconto{
+        text-shadow: 0.8px 0.8px 0.8px blue;
+        font-weight: bold
+    }
+    
+  </style>
+  <script>
+    function validarMaxLength(inputs) {
+      if (inputs.value.length > 6) {
+        inputs.value = inputs.value.slice(0, 6);
+      }
+    }
+
+    function validarMaxLengthFloats(inputs) {
+  if (inputs.value.length > 7) {
+    inputs.value = inputs.value.slice(0, 7);
+  }
+}
+
+    function validarInput(evt) {
+      var theEvent = evt || window.event;
+      var key = theEvent.keyCode || theEvent.which;
+      var regex = /[0-9]/;
+      if (!regex.test(String.fromCharCode(key))) {
+        theEvent.returnValue = false;
+        if (theEvent.preventDefault) theEvent.preventDefault();
+      }
+    }
+    
+
+    function validarFloatInput(evt) {
+  var theEvent = evt || window.event;
+  var key = theEvent.keyCode || theEvent.which;
+  var keyChar = String.fromCharCode(key);
+
+  // Regex para aceitar números, pontos e vírgulas
+  var regex = /[0-9.,]/;
+
+  if (!regex.test(keyChar)) {
+    // Impede a entrada de caracteres inválidos
+    theEvent.returnValue = false;
+    if (theEvent.preventDefault) theEvent.preventDefault();
+  } else {
+    // Converte vírgula para ponto automaticamente
+    if (keyChar === ',') {
+      keyChar === '.';
+    }
+  }
+}
+
+var resultadocomdesconto = 0;
+var resultado = 0;
+var totalssdrpospaga = 0;
+var totalssdrfechpospaga = 0;
+var totalcancelatpv = 0;
+var totalcrlve = 0;
+var totalconsultabin = 0;
+var totalconsultagravame = 0;
+var totalconsultauf = 0;
+var totalconsultadetran = 0;
+var totalconsultamultas = 0;
+var totalconsultadebitos = 0;
+var totalconsultaprotocoloaberto = 0;
+var totalconsultarestricoes = 0;
+var totalcadastrocrv = 0;
+var totalboleto3097 = 0;
+var totalboleto4722 = 0;
+var totalboleto5597 = 0;
+var totalboleto6347 = 0;
+var totalboleto5034 = 0;
+var totalboleto6909 = 0;
+var totalboleto7534 = 0;
+var totalboleto8284 = 0;
+var totalcreditoexcedente = 0;
+var totalcancelamentossdrpospaga = 0;
+var totalcancelamentossdrfechpospaga = 0;
+var totalcreditoretorno = 0;
+var totaldetudo = 0;
+
+function calcularTotalDeTudo() {
+      
+      totaldetudo = 
+
+      resultadocomdesconto +
+      resultado +
+      totalssdrpospaga +
+      totalssdrfechpospaga +
+      totalcancelatpv +
+      totalcrlve +
+      totalconsultabin +
+      totalconsultagravame +
+      totalconsultauf +
+      totalconsultadetran +
+      totalconsultamultas +
+      totalconsultadebitos +
+      totalconsultaprotocoloaberto +
+      totalconsultarestricoes +
+      totalcadastrocrv +
+      totalboleto3097 +
+      totalboleto4722 +
+      totalboleto5597 +
+      totalboleto6347 +
+      totalboleto5034 +
+      totalboleto6909 +
+      totalboleto7534 +
+      totalboleto8284 -
+
+      totalcreditoexcedente -
+      totalcancelamentossdrpospaga -
+      totalcancelamentossdrfechpospaga -
+      totalcreditoretorno;
+
+      if (totaldetudo < 0) {
+        totaldetudo = 0;
+      }
+
+      if (isNaN(totaldetudo)) {
+        totaldetudo = 0;
+      }
+    document.getElementById('totaldetudo').innerHTML = "R$" + totaldetudo.toFixed(2);   
+    }
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    function calcularTotalDeTudo() {
+        totaldetudo = 
+        resultadocomdesconto +
+        resultado +
+        totalssdrpospaga +
+        totalssdrfechpospaga +
+        totalcancelatpv +
+        totalcrlve +
+        totalconsultabin +
+        totalconsultagravame +
+        totalconsultauf +
+        totalconsultadetran +
+        totalconsultamultas +
+        totalconsultadebitos +
+        totalconsultaprotocoloaberto +
+        totalconsultarestricoes +
+        totalcadastrocrv +
+        totalboleto3097 +
+        totalboleto4722 +
+        totalboleto5597 +
+        totalboleto6347 +
+        totalboleto5034 +
+        totalboleto6909 +
+        totalboleto7534 +
+        totalboleto8284 -
+        totalcreditoexcedente -
+        totalcancelamentossdrpospaga -
+        totalcancelamentossdrfechpospaga -
+        totalcreditoretorno;
+        document.getElementById('totaldetudo').innerHTML = "= R$" + totaldetudo.toFixed(2);
+        }
+        calcularTotalDeTudo()
+    });
+    
+
+    function calcularResultadoAtpvSemDesconto() {
+      var atpvquant = parseFloat(document.getElementById('atpvquant').value);
+      var ssdrquant = parseFloat(document.getElementById('ssdrquant').value);
+      var resultado_atpv_menos_ssdr = (atpvquant - ssdrquant);
+
+      if (isNaN(atpvquant)) {
+        atpvquant = 0;
+      }
+
+      if (isNaN(ssdrquant)) {
+        ssdrquant = 0;
+      }
+
+      if (resultado_atpv_menos_ssdr < 0) {
+        resultado_atpv_menos_ssdr = 0;
+      }
+
+      if (isNaN(resultado_atpv_menos_ssdr)) {
+        resultado_atpv_menos_ssdr = 0;
+      }
+      
+      resultado = resultado_atpv_menos_ssdr * 41.76;
+
+      document.getElementById('atpvsemdesconto').innerHTML = resultado_atpv_menos_ssdr;
+      document.getElementById('totalatpvsemdesconto').innerHTML = " x R$41.76 = R$" + resultado.toFixed(2);
+      calcularTotalDeTudo()
+    }
+
+    
+     function calcularResultadoAtpvComDesconto() {
+      var atpvquant = parseFloat(document.getElementById('atpvquant').value);
+      var ssdrquant = parseFloat(document.getElementById('ssdrquant').value);
+      var resultado_ssdr_menos_atpv = atpvquant - atpvquant + ssdrquant;
+
+      if (isNaN(atpvquant)) {
+        atpvquant = 0;
+      }
+
+      if (isNaN(ssdrquant)) {
+        ssdrquant = 0;
+      }
+
+      if (resultado_ssdr_menos_atpv < 0) {
+        resultado_ssdr_menos_atpv = 0;
+      }
+
+      if (isNaN(resultado_ssdr_menos_atpv)) {
+        resultado_ssdr_menos_atpv = 0;
+      }
+      
+      if (resultado_ssdr_menos_atpv > atpvquant){
+        resultado_ssdr_menos_atpv = atpvquant;
+      }
+       resultadocomdesconto = resultado_ssdr_menos_atpv * 27.84;
+      document.getElementById('atpvcomdesconto').innerHTML = resultado_ssdr_menos_atpv;
+      document.getElementById('totalatpvcomdesconto').innerHTML = " x R$27.84 = R$" + resultadocomdesconto.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularSsdrPosPaga() {
+        var ssdrpospaga = parseFloat(document.getElementById('ssdrpospaga').value);
+
+        if (isNaN(ssdrpospaga)) {
+            ssdrpospaga = 0;
+      }
+
+      totalssdrpospaga = ssdrpospaga * 27.84;
+      document.getElementById('totalssdrpospaga').innerHTML = " x R$27.84 = R$" + totalssdrpospaga.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularSsdrFechPosPaga() {
+        var ssdrfechpospaga = parseFloat(document.getElementById('ssdrfechpospaga').value);
+
+        if (isNaN(ssdrfechpospaga)) {
+            ssdrfechpospaga = 0;
+      }
+
+      totalssdrfechpospaga = ssdrfechpospaga * 47.84;
+      document.getElementById('totalssdrfechpospaga').innerHTML = " x R$47.84 = R$" + totalssdrfechpospaga.toFixed(2);
+      calcularTotalDeTudo()
+    }
+
+    function calcularCancelamentoDeAtpv() {
+        var cancelatpv = parseFloat(document.getElementById('cancelatpv').value);
+
+        if (isNaN(cancelatpv)) {
+            cancelatpv = 0;
+      }
+
+      totalcancelatpv = cancelatpv * 27.84;
+      document.getElementById('totalcancelatpv').innerHTML = " x R$27.84 = R$" + totalcancelatpv.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularCrlve() {
+        var crlve = parseFloat(document.getElementById('crlve').value);
+
+        if (isNaN(crlve)) {
+            crlve = 0;
+      }
+
+      totalcrlve = crlve * 6.00;
+      document.getElementById('totalcrlve').innerHTML = " x R$06.00 = R$" + totalcrlve.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularConsultaBin() {
+        var consultabin= parseFloat(document.getElementById('consultabin').value);
+
+        if (isNaN(consultabin)) {
+            consultabin = 0;
+      }
+
+      totalconsultabin = consultabin * 3.00;
+      document.getElementById('totalconsultabin').innerHTML = " x R$03.00 = R$" + totalconsultabin.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularConsultaGravame() {
+        var consultagravame = parseFloat(document.getElementById('consultagravame').value);
+
+        if (isNaN(consultagravame)) {
+            consultagravame = 0;
+      }
+
+      totalconsultagravame = consultagravame * 3.00;
+      document.getElementById('totalconsultagravame').innerHTML = " x R$03.00 = R$" + totalconsultagravame.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularConsultaUf() {
+        var consultauf = parseFloat(document.getElementById('consultauf').value);
+
+        if (isNaN(consultauf)) {
+          consultauf = 0;
+      }
+
+      totalconsultauf = consultauf * 3.00;
+      document.getElementById('totalconsultauf').innerHTML = " x R$03.00 = R$" + totalconsultauf.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularConsultaDetran() {
+        var consultadetran = parseFloat(document.getElementById('consultadetran').value);
+
+        if (isNaN(consultadetran)) {
+          consultadetran = 0;
+      }
+
+      totalconsultadetran = consultadetran * 3.00;
+      document.getElementById('totalconsultadetran').innerHTML = " x R$03.00 = R$" + totalconsultadetran.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularConsultaMultas() {
+        var consultamultas = parseFloat(document.getElementById('consultamultas').value);
+
+        if (isNaN(consultamultas)) {
+          consultamultas = 0;
+      }
+
+      totalconsultamultas = consultamultas * 3.00;
+      document.getElementById('totalconsultamultas').innerHTML = " x R$03.00 = R$" + totalconsultamultas.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularConsultaDebitos() {
+        var consultadebitos = parseFloat(document.getElementById('consultadebitos').value);
+
+        if (isNaN(consultadebitos)) {
+          consultadebitos = 0;
+      }
+
+      totalconsultadebitos = consultadebitos * 3.00;
+      document.getElementById('totalconsultadebitos').innerHTML = " x R$03.00 = R$" + totalconsultadebitos.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularConsultaProtocoloAberto() {
+        var consultaprotocoloaberto = parseFloat(document.getElementById('consultaprotocoloaberto').value);
+
+        if (isNaN(consultaprotocoloaberto)) {
+          consultaprotocoloaberto = 0;
+      }
+
+      totalconsultaprotocoloaberto = consultaprotocoloaberto * 3.00;
+      document.getElementById('totalconsultaprotocoloaberto').innerHTML = " x R$03.00 = R$" + totalconsultaprotocoloaberto.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularConsultaRestricoes() {
+        var consultarestricoes = parseFloat(document.getElementById('consultarestricoes').value);
+
+        if (isNaN(consultarestricoes)) {
+          consultarestricoes = 0;
+      }
+
+      totalconsultarestricoes = consultarestricoes * 10.50;
+      document.getElementById('totalconsultarestricoes').innerHTML = " x R$10.50 = R$" + totalconsultarestricoes.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularCadastroCrv() {
+        var cadastrocrv = parseFloat(document.getElementById('cadastrocrv').value);
+
+        if (isNaN(cadastrocrv)) {
+          cadastrocrv = 0;
+      }
+
+      totalcadastrocrv = cadastrocrv * 27.84;
+      document.getElementById('totalcadastrocrv').innerHTML = " x R$27.84 = R$" + totalcadastrocrv.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularBoleto3097() {
+        var boleto3097= parseFloat(document.getElementById('boleto3097').value);
+
+        if (isNaN(boleto3097)) {
+          boleto3097 = 0;
+      }
+
+      totalboleto3097 = boleto3097 * 30.97;
+      document.getElementById('totalboleto3097').innerHTML = " x R$30.97 = R$" + totalboleto3097.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularBoleto4722() {
+        var boleto4722= parseFloat(document.getElementById('boleto4722').value);
+
+        if (isNaN(boleto4722)) {
+          boleto4722 = 0;
+      }
+
+      totalboleto4722 = boleto4722 * 47.22;
+      document.getElementById('totalboleto4722').innerHTML = " x R$47.22 = R$" + totalboleto4722.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularBoleto5597() {
+        var boleto5597= parseFloat(document.getElementById('boleto5597').value);
+
+        if (isNaN(boleto5597)) {
+          boleto5597 = 0;
+      }
+
+      totalboleto5597 = boleto5597 * 55.97;
+      document.getElementById('totalboleto5597').innerHTML = " x R$55.97 = R$" + totalboleto5597.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularBoleto6347() {
+        var boleto6347= parseFloat(document.getElementById('boleto6347').value);
+
+        if (isNaN(boleto6347)) {
+          boleto6347 = 0;
+      }
+
+      totalboleto6347 = boleto6347 * 63.47;
+      document.getElementById('totalboleto6347').innerHTML = " x R$63.47 = R$" + totalboleto6347.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularBoleto5034() {
+        var boleto5034= parseFloat(document.getElementById('boleto5034').value);
+
+        if (isNaN(boleto5034)) {
+          boleto5034 = 0;
+      }
+
+      totalboleto5034 = boleto5034 * 50.34;
+      document.getElementById('totalboleto5034').innerHTML = " x R$50.34 = R$" + totalboleto5034.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularBoleto6909() {
+        var boleto6909= parseFloat(document.getElementById('boleto6909').value);
+
+        if (isNaN(boleto6909)) {
+          boleto6909 = 0;
+      }
+
+      totalboleto6909 = boleto6909 * 69.09;
+      document.getElementById('totalboleto6909').innerHTML = " x R$69.09 = R$" + totalboleto6909.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularBoleto7534() {
+        var boleto7534= parseFloat(document.getElementById('boleto7534').value);
+
+        if (isNaN(boleto7534)) {
+          boleto7534 = 0;
+      }
+
+      totalboleto7534 = boleto7534 * 75.34;
+      document.getElementById('totalboleto7534').innerHTML = " x R$75.34 = R$" + totalboleto7534.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularBoleto8284() {
+        var boleto8284= parseFloat(document.getElementById('boleto8284').value);
+
+        if (isNaN(boleto8284)) {
+          boleto8284 = 0;
+      }
+
+      totalboleto8284 = boleto8284 * 82.84;
+      document.getElementById('totalboleto8284').innerHTML = " x R$82.84 = R$" + totalboleto8284.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularCreditoExcedente() {
+        var creditoexcedente = parseFloat(document.getElementById('creditoexcedente').value);
+
+        if (isNaN(creditoexcedente)) {
+          creditoexcedente = 0;
+      }
+
+      totalcreditoexcedente = creditoexcedente * 1.0;
+      document.getElementById('totalcreditoexcedente').innerHTML = "= R$" + totalcreditoexcedente.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularCancelamentoSsdrPosPaga() {
+        var cancelamentossdrpospaga= parseFloat(document.getElementById('cancelamentossdrpospaga').value);
+
+        if (isNaN(cancelamentossdrpospaga)) {
+          cancelamentossdrpospaga = 0;
+      }
+
+      totalcancelamentossdrpospaga = cancelamentossdrpospaga * 27.84;
+      document.getElementById('totalcancelamentossdrpospaga').innerHTML = " x R$27.84 = R$" + totalcancelamentossdrpospaga.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    function calcularCancelamentoSsdrFechPosPaga() {
+      var cancelamentossdrfechpospaga= parseFloat(document.getElementById('cancelamentossdrfechpospaga').value);
+
+    if (isNaN(cancelamentossdrfechpospaga)) {
+  cancelamentossdrfechpospaga = 0;
+    }
+
+    totalcancelamentossdrfechpospaga = cancelamentossdrfechpospaga * 50.34;
+    document.getElementById('totalcancelamentossdrfechpospaga').innerHTML = " x R$50.34 = R$" + totalcancelamentossdrfechpospaga.toFixed(2);   
+    calcularTotalDeTudo()
+    }
+
+    function calcularCreditoRetorno() {
+      var creditoretorno = parseFloat(document.getElementById('creditoretorno').value);
+
+      if (isNaN(creditoretorno)) {
+        creditoretorno = 0;
+      }
+
+      totalcreditoretorno = creditoretorno * 1.0;
+      document.getElementById('totalcreditoretorno').innerHTML = "= R$" + totalcreditoretorno.toFixed(2);   
+      calcularTotalDeTudo()
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', (event) => {
+      document.getElementById('atpvquant').addEventListener('input', () => {
+        calcularResultadoAtpvSemDesconto();
+        calcularResultadoAtpvComDesconto();
+      });
+
+      document.getElementById('ssdrquant').addEventListener('input', () => {
+        calcularResultadoAtpvSemDesconto();
+        calcularResultadoAtpvComDesconto();
+      });
+
+    document.getElementById('ssdrpospaga').addEventListener('input', () => {
+        calcularSsdrPosPaga();
+    });
+
+    document.getElementById('ssdrfechpospaga').addEventListener('input', () => {
+        calcularSsdrFechPosPaga();
+    });
+
+    document.getElementById('cancelatpv').addEventListener('input', () => {
+        calcularCancelamentoDeAtpv();
+    });
+
+    document.getElementById('crlve').addEventListener('input', () => {
+        calcularCrlve();
+    });
+
+    document.getElementById('consultabin').addEventListener('input', () => {
+        calcularConsultaBin();
+    });
+
+    document.getElementById('consultagravame').addEventListener('input', () => {
+        calcularConsultaGravame();
+    });
+
+    document.getElementById('consultauf').addEventListener('input', () => {
+        calcularConsultaUf();
+    });
+
+    document.getElementById('consultadetran').addEventListener('input', () => {
+        calcularConsultaDetran();
+    });
+
+    document.getElementById('consultamultas').addEventListener('input', () => {
+        calcularConsultaMultas();
+    });
+
+    document.getElementById('consultadebitos').addEventListener('input', () => {
+        calcularConsultaDebitos();
+    });
+
+    document.getElementById('consultaprotocoloaberto').addEventListener('input', () => {
+        calcularConsultaProtocoloAberto();
+    });
+
+    document.getElementById('consultarestricoes').addEventListener('input', () => {
+        calcularConsultaRestricoes();
+    });
+
+    document.getElementById('cadastrocrv').addEventListener('input', () => {
+        calcularCadastroCrv();
+    });
+
+    document.getElementById('boleto3097').addEventListener('input', () => {
+        calcularBoleto3097();
+    });
+
+    document.getElementById('boleto4722').addEventListener('input', () => {
+        calcularBoleto4722();
+    });
+
+    document.getElementById('boleto5597').addEventListener('input', () => {
+        calcularBoleto5597();
+    });
+
+    document.getElementById('boleto6347').addEventListener('input', () => {
+        calcularBoleto6347();
+    });
+
+    document.getElementById('boleto5034').addEventListener('input', () => {
+        calcularBoleto5034();
+    });
+    
+    document.getElementById('boleto6909').addEventListener('input', () => {
+        calcularBoleto6909();
+    });
+
+    document.getElementById('boleto7534').addEventListener('input', () => {
+        calcularBoleto7534();
+    });
+
+    document.getElementById('boleto8284').addEventListener('input', () => {
+        calcularBoleto8284();
+    });
+
+    document.getElementById('creditoexcedente').addEventListener('input', () => {
+        calcularCreditoExcedente();
+    });
+
+    document.getElementById('cancelamentossdrpospaga').addEventListener('input', () => {
+        calcularCancelamentoSsdrPosPaga();
+    });
+
+    document.getElementById('cancelamentossdrfechpospaga').addEventListener('input', () => {
+        calcularCancelamentoSsdrFechPosPaga();
+    });
+
+    document.getElementById('creditoretorno').addEventListener('input', () => {
+        calcularCreditoRetorno();
+    });
+    
+
+      calcularResultadoAtpvSemDesconto();
+      calcularResultadoAtpvComDesconto();
+      calcularSsdrPosPaga();
+      calcularSsdrFechPosPaga();
+      calcularCancelamentoDeAtpv();
+      calcularCrlve();
+      calcularConsultaBin();
+      calcularConsultaGravame();
+      calcularConsultaUf();
+      calcularConsultaDetran();
+      calcularConsultaMultas();
+      calcularConsultaDebitos();
+      calcularConsultaProtocoloAberto();
+      calcularConsultaRestricoes();
+      calcularCadastroCrv();
+      calcularBoleto3097();
+      calcularBoleto4722();
+      calcularBoleto5597();
+      calcularBoleto6347();
+      calcularBoleto5034();
+      calcularBoleto6909();
+      calcularBoleto7534();
+      calcularBoleto8284();
+      calcularCreditoExcedente();
+      calcularCancelamentoSsdrPosPaga();
+      calcularCancelamentoSsdrFechPosPaga();
+      calcularCreditoRetorno();
+      calcularTotalDeTudo();
+});
+  </script>
+</head>
+
+<body>
+<header>
+  <h1 id="titulo">Calculadora de Borderô</h1>
+  <p id="jaba"><i>Desenvolvido por:</i><br><b>Ernane Cunha</b></p>
+</header>
+<main id="campos">
+   <h4>Primeiramente, calcule a quantidade de ATPV-es com e sem desconto:</h4>
+  <div class="itens">
+    <label for="ssdrquant" class="estilolabel">Quantidade de SSDRs (Digite a quantidade total (Pós+Pré)):</label>
+    <input type="number" id="ssdrquant"  class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+  </div>
+  <div class="itens">
+    <label for="atpvquant" class="estilolabel">Quantidade de ATPV-es:</label>
+    <input type="number" id="atpvquant" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+  </div>
+  <div class="divdasatpv">
+    <div id="pdasatpvsemdesconto">
+    <p>Quantidade de ATPV-es sem desconto: </p>
+    </div>
+    <div id="numerosdasatpvsemdesconto">
+    <span id="atpvsemdesconto"></span>
+    </div>
+    <div id="resultadoatpvsemdesconto">
+    <span id="totalatpvsemdesconto"></span>
+    </div>
+  </div>
+  <div class="divdasatpv" style="border-bottom : 2px dotted white">
+    <div id="pdasatpvcomdesconto">
+    <p>Quantidade de ATPV-es com desconto: </p>
+    </div>
+    <div id="numerosdasatpvcomdesconto">
+    <span id="atpvcomdesconto"></span>
+    </div>
+    <div id="resultadoatpvcomdesconto">
+    <span class="resultadosazuis" id="totalatpvcomdesconto"></span>
+    </div>
+   
+  </div>
+    <h4>Agora calcule os demais itens:</h4>
+    <div class="itens">
+        <label for="ssdrpospaga" class="estilolabel">SSDRs Pós-Pagas:</label>
+        <input type="number" id="ssdrpospaga" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalssdrpospaga"></span>
+    </div>
+      <div class="itens">
+        <label for="ssdrfechpospaga" class="estilolabel">SSDRs + Fechamento Pós-Pagas:</label>
+        <input type="number" id="ssdrfechpospaga" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalssdrfechpospaga"></span>
+    </div>
+    <div class="itens">
+        <label for="cancelatpv" class="estilolabel">ATPV-e fora da franquia (CANCELAMENTO):</label>
+        <input type="number" id="cancelatpv" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalcancelatpv"></span>
+    </div>
+    <div class="itens">
+        <label for="crlve" class="estilolabel">Impressão de CRLV-e</label>
+        <input type="number" id="crlve" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalcrlve"></span>
+    </div>
+    <div class="itens">
+        <label for="consultabin" class="estilolabel">Consulta BIN fora da franquia:</label>
+        <input type="number" id="consultabin" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalconsultabin"></span>
+    </div>
+    <div class="itens">
+        <label for="consultagravame" class="estilolabel">Consulta Gravame fora da franquia:</label>
+        <input type="number" id="consultagravame" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalconsultagravame"></span>
+    </div>
+    <div class="itens">
+        <label for="consultauf" class="estilolabel">Consulta UF Jurisdição fora da franquia:</label>
+        <input type="number" id="consultauf" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalconsultauf"></span>
+      </div>
+    <div class="itens">
+        <label for="consultadetran" class="estilolabel">Consulta DETRAN-BA fora da franquia:</label>
+        <input type="number" id="consultadetran" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalconsultadetran"></span>
+      </div>
+    <div class="itens">
+        <label for="consultamultas" class="estilolabel">Consulta Multas (DETRAN-BA):</label>
+        <input type="number" id="consultamultas" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalconsultamultas"></span>
+      </div>
+    <div class="itens">
+        <label for="consultadebitos" class="estilolabel">Consulta Débitos - BA:</label>
+        <input type="number" id="consultadebitos" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalconsultadebitos"></span>
+      </div>
+    <div class="itens">
+        <label for="consultaprotocoloaberto" class="estilolabel">Consulta Protocolo Aberto:</label>
+        <input type="number" id="consultaprotocoloaberto" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalconsultaprotocoloaberto"></span>
+      </div>
+    <div class="itens">
+        <label for="consultarestricoes" class="estilolabel">Consulta de Restrições:</label>
+        <input type="number" id="consultarestricoes" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalconsultarestricoes"></span>
+      </div>
+    <div class="itens">
+        <label for="cadastrocrv" class="estilolabel">Cadastro de Planilha CRV:</label>
+        <input type="number" id="cadastrocrv" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalcadastrocrv"></span>
+      </div>
+      <div class="itens">
+        <label for="boleto3097" class="estilolabel">Débito boleto (pré-pago) não pago (R$30,97):</label>
+        <input type="number" id="boleto3097" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalboleto3097"></span>
+      </div>
+      <div class="itens">
+        <label for="boleto4722" class="estilolabel">Débito boleto (pré-pago) não pago (R$47,22):</label>
+        <input type="number" id="boleto4722" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalboleto4722"></span>
+      </div>
+      <div class="itens">
+        <label for="boleto5597" class="estilolabel">Débito boleto (pré-pago) não pago (R$55,97):</label>
+        <input type="number" id="boleto5597" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalboleto5597"></span>
+      </div>
+      <div class="itens">
+        <label for="boleto6347" class="estilolabel">Débito boleto (pré-pago) não pago (R$63,47):</label>
+        <input type="number" id="boleto6347" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalboleto6347"></span>
+      </div>
+      <div class="itens">
+        <label for="boleto5034" class="estilolabel">Débito boleto (pré-pago) não pago (R$50,34):</label>
+        <input type="number" id="boleto5034" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalboleto5034"></span>
+      </div>
+      <div class="itens">
+        <label for="boleto6909" class="estilolabel">Débito boleto (pré-pago) não pago (R$69,09):</label>
+        <input type="number" id="boleto6909" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalboleto6909"></span>
+      </div>
+      <div class="itens">
+        <label for="boleto7534" class="estilolabel">Débito boleto (pré-pago) não pago (R$75,34):</label>
+        <input type="number" id="boleto7534" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalboleto7534"></span>
+      </div>
+      <div class="itens">
+        <label for="boleto8284" class="estilolabel">Débito boleto (pré-pago) não pago (R$82,84):</label>
+        <input type="number" id="boleto8284" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosazuis" id="totalboleto8284"></span>
+      </div>
+      <h4 id="horacreditos">Hora de calcular os créditos</h4>
+      <div class="itens">
+        <label for="creditoexcedente" class="estilolabel">Crédito excedente:</label>
+        <input type="number" id="creditoexcedente" class="estiloinput" oninput="validarMaxLengthFloats(this)" onkeypress="validarFloatInput(event)">
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span class="resultadosverdes" id="totalcreditoexcedente">&nbsp;&nbsp;&nbsp;</span>
+      </div>
+      <div class="itens">
+        <label for="cancelamentossdrpospaga" class="estilolabel">Cancelamento SSDR pós-paga (R$27,84):</label>
+        <input type="number" id="cancelamentossdrpospaga" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosverdes" id="totalcancelamentossdrpospaga"></span>
+      </div>
+      <div class="itens">
+        <label for="cancelamentossdrfechpospaga" class="estilolabel">Cancelamento SSDR + Fechamento pós-paga (R$47,84):</label>
+        <input type="number" id="cancelamentossdrfechpospaga" class="estiloinput" oninput="validarMaxLength(this)" onkeypress="validarInput(event)">
+        <span class="resultadosverdes" id="totalcancelamentossdrfechpospaga"></span>
+      </div>
+      <div class="itens">
+        <label for="creditoretorno" class="estilolabel">Crédito de retorno (Resgate em fatura):</label>
+        <input type="number" id="creditoretorno" class="estiloinput" oninput="validarMaxLengthFloats(this)" onkeypress="validarFloatInput(event)">
+        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span class="resultadosverdes" id="totalcreditoretorno"></span>
+      </div>
+      <div id="divtotal">
+        <div id="labeltotal">
+        <label for="totaldetudo">TOTAL = </label>
+        </div>
+        <div id="blanktotal">
+
+        </div>
+        <div id="totaltotal">
+        <span id="totaldetudo" justify-self="start"></span>
+        </div>
+      </div>
+</main>
+</body>
+</html>
